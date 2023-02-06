@@ -22,8 +22,9 @@ public class Login {
             System.out.println("password:");
             String kbPwd = new Scanner(System.in).nextLine();
             User userKb = new User();
+            String passdecripted = passCript(kbPwd);
             userKb.setUsername(kbUsername);
-            userKb.setPassword(kbPwd);
+            userKb.setPassword(passdecripted);
             contor = contor + 1;
 
             for (User u : listUsers) {
