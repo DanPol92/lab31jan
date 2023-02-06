@@ -51,6 +51,46 @@ public class Login {
 
     }
 
+    public static String passCript(String s) {
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String str = "";
+        for (int i = 0; i < s.length(); i++) {
+            char a = s.charAt(i);
+            int b = s.charAt(i);
+            for (int j = 0; j < alphabet.length() - 4; j++) {
+                if (alphabet.charAt(j) == a) {
+                    a = alphabet.charAt(j + 4);
+                    break;
+                }
+            }
+            str += a;
+        }
+        return str;
+    }
+
+    private boolean checkUserValid(String usernameAddedByAdmin) {
+        boolean checkUserValid;
+        String regex = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher m = pattern.matcher(usernameAddedByAdmin);
+        if (!m.matches()) {
+            System.out.println("Username-ul nu a fost adaugat deoarece nu este in formatul dorit, incearca din nou.");
+            checkUserValid = false;
+        } else checkUserValid = true;
+        return checkUserValid;
+    }
+
+    private boolean checPassValid(String usernameAddedByAdmin) {
+        boolean checkPassValid;
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"; //Minimum eight characters, at least one letter and one number
+        Pattern pattern = Pattern.compile(regex);
+        Matcher m = pattern.matcher(usernameAddedByAdmin);
+        if (!m.matches()) {
+            System.out.println("Parola nu este in formatul dorit, incearca din nou(Minim 8 caractere, o litera mare si un numar).");
+            checkPassValid = false;
+        } else checkPassValid = true;
+        return checkPassValid;
+    }
 
     private void addUserbyAdmin(User user) {
         User us = new User();
@@ -64,25 +104,23 @@ public class Login {
                     case 1:
                         System.out.println("adauga pe fisier noul username(format email address):");
                         String usernameAddedByAdmin = new Scanner(System.in).nextLine();
-                        String regex = "^(.+)@(.+)$";
-                        Pattern pattern = Pattern.compile(regex);
-                        Matcher m = pattern.matcher(usernameAddedByAdmin);
-                        if (!m.matches()) {
-                            System.out.println("Username-ul nu a fost adaugat deoarece nu este in formatul dorit, incearca din nou.");
-                        } else {
+                        if (checkUserValid(usernameAddedByAdmin)) {
                             System.out.println("adauga parola pentru user-ul creeat:");
                             String passAddedByAdmin = new Scanner(System.in).nextLine();
-                            System.out.println("adauga rolul pentru user-ul creeat(Utilizator simplu(false),Admin(true):");
-                            String roleAddedByAdmin = new Scanner(System.in).nextLine();
-                            System.out.println("Poate user-ul sa adauge stiri?(True/False):");
-                            String userisAnalyst = new Scanner(System.in).nextLine();
-                            us.setUsername(usernameAddedByAdmin);
-                            us.setPassword(passAddedByAdmin);
-                            us.setAdmin(Boolean.parseBoolean(roleAddedByAdmin));
-                            us.setAnalist(Boolean.parseBoolean(userisAnalyst));
-                            writeOnDisk(us);
+                            if (checPassValid(passAddedByAdmin)) {
+                                System.out.println("adauga rolul pentru user-ul creeat(Utilizator simplu(false),Admin(true):");
+                                String roleAddedByAdmin = new Scanner(System.in).nextLine();
+                                System.out.println("Poate user-ul sa adauge stiri?(True/False):");
+                                String userisAnalyst = new Scanner(System.in).nextLine();
+                                us.setUsername(usernameAddedByAdmin);
+                                us.setPassword(passCript(passAddedByAdmin));
+                                us.setAdmin(Boolean.parseBoolean(roleAddedByAdmin));
+                                us.setAnalist(Boolean.parseBoolean(userisAnalyst));
+                                writeOnDisk(us);
+                            }
                         }
                         break;
+
                     case 2:
                         status = true;
                         //break;
@@ -100,15 +138,19 @@ public class Login {
                     -Pentru iesire din program apasa 2""");
     }
 
-    private void writeOnDisk(User user){
+    private void writeOnDisk(User user) {
         try (FileWriter fw = new FileWriter("users.txt", true)) {
-            fw.write( user.addToFile());
+            if (checkUserValid(user.getUsername())) {
+                fw.write(user.addToFile());
+            } else if (!checkUserValid(user.getUsername())) {
+                fw.write(System.lineSeparator() + user.addToFile());
+            }
+
 
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
-
 
 
     private List<User> loadDB() {
@@ -124,10 +166,10 @@ public class Login {
                 String currentLineOfText = listOfUsersAsStrings.get(i);
                 StringTokenizer st = new StringTokenizer(currentLineOfText, ",");
                 while (st.hasMoreTokens()) {
-                    String user  = st.nextToken();
-                    String pass  = st.nextToken();
+                    String user = st.nextToken();
+                    String pass = st.nextToken();
                     String admin = st.nextToken();
-                    String news  = st.nextToken();
+                    String news = st.nextToken();
                     uObj.setUsername(user.trim());
                     uObj.setPassword(pass.trim());
                     uObj.setAdmin(admin.trim().equalsIgnoreCase("true"));
