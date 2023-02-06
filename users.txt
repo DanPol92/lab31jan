@@ -1,3 +1,4 @@
-ionel, pwd1
-maria,pwd2
-ana,pwd3
+admin,admin,true,false
+ionel@email.com,pwd1,false,false
+maria@email.com,pwd2,false,false
+dan@email.com,pwd3,false,true

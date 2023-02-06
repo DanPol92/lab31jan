@@ -1,8 +1,13 @@
 package newsanalizer.usermanagement;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User {
+public class User  {
+    private String username;
+    private String password;
+    private boolean isAdmin;
+    private boolean isAnalist;
     public String getUsername() {
         return username;
     }
@@ -15,10 +20,25 @@ public class User {
         return password;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public boolean isAnalist() {
+        return isAnalist;
+    }
+
+    public void setAnalist(boolean analist) {
+        isAnalist = analist;
+    }
 
     public boolean equalsUsers(Object o) {
         if (this == o) return true;
@@ -32,8 +52,7 @@ public class User {
         return Objects.hash(username, password);
     }
 
-    private String username;
-    private String password;
+
 
     @Override
     public String toString() {
@@ -41,5 +60,9 @@ public class User {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public String addToFile(){
+        return username+","+password+","+isAdmin+','+isAnalist;
     }
 }
