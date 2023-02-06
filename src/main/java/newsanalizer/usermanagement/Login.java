@@ -140,15 +140,12 @@ public class Login {
 
     private void writeOnDisk(User user) {
         try (FileWriter fw = new FileWriter("users.txt", true)) {
-            if (checkUserValid(user.getUsername())) {
-                fw.write(user.addToFile());
-            } else if (!checkUserValid(user.getUsername())) {
+            if (checkUserValid(user.getUsername())&& checPassValid(user.getPassword())) {
                 fw.write(System.lineSeparator() + user.addToFile());
             }
 
-
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
