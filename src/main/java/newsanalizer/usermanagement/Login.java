@@ -14,7 +14,6 @@ public class Login {
 
         List<User> listUsers = loadDB();
         boolean succes = false;
-        boolean check = true;
         int contor = 0;
         do {
             System.out.println("username:");
@@ -83,11 +82,11 @@ public class Login {
 
     private boolean checPassValid(String usernameAddedByAdmin) {
         boolean checkPassValid;
-        String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"; //Minimum eight characters, at least one letter and one number
+        String regex = "^(?=.*[A-Za-z])[A-Za-z\\d]{8,}$"; //Minimum eight characters, at least one letter
         Pattern pattern = Pattern.compile(regex);
         Matcher m = pattern.matcher(usernameAddedByAdmin);
         if (!m.matches()) {
-            System.out.println("Parola nu este in formatul dorit, incearca din nou(Minim 8 caractere, o litera mare si un numar).");
+            System.out.println("Parola nu este in formatul dorit, incearca din nou(Minim 8 caractere, o litera mare).");
             checkPassValid = false;
         } else checkPassValid = true;
         return checkPassValid;
@@ -106,7 +105,7 @@ public class Login {
                         System.out.println("adauga pe fisier noul username(format email address):");
                         String usernameAddedByAdmin = new Scanner(System.in).nextLine();
                         if (checkUserValid(usernameAddedByAdmin)) {
-                            System.out.println("adauga parola pentru user-ul creeat:");
+                            System.out.println("adauga parola pentru user-ul creeat(Minim 8 caractere si o litera mare):");
                             String passAddedByAdmin = new Scanner(System.in).nextLine();
                             if (checPassValid(passAddedByAdmin)) {
                                 System.out.println("adauga rolul pentru user-ul creeat(Utilizator simplu(false),Admin(true):");
@@ -142,7 +141,7 @@ public class Login {
     private void writeOnDisk(User user) {
         try (FileWriter fw = new FileWriter("users.txt", true)) {
             if (checkUserValid(user.getUsername())&& checPassValid(user.getPassword())) {
-                fw.write(System.lineSeparator() + user.addToFile());
+                fw.write( user.addToFile());
             }
 
         } catch (IOException e) {

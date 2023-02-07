@@ -1,4 +1,3 @@
 admin,ehqmr,true,false
-ionel@email.com,pwd1,false,false
-maria@email.com,pwd2,false,false
-dan@email.com,pwd3,false,true
+dan@email.com,Dermip,false,true
+lorena@yahoo.com,LsvirePsp,false,false
